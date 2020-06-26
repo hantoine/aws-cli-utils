@@ -1,0 +1,14 @@
+#!/bin/sh
+if [ "$#" -lt 1 ]; then
+	echo "Usage: aws-list [instance-type] (availability-zone)"
+	exit
+fi
+
+command="aws ec2 describe-spot-price-history --start-time $(date -Idate) --filters"
+command="$command Name=product-description,Values=Linux/UNIX"
+command="$command Name=instance-type,Values=$1"
+if [ ! -z "$2" ] ; then
+	command="$command \"Name=availability-zone,Values=$2\""
+fi
+
+exec $command

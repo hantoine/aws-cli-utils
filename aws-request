@@ -1,0 +1,34 @@
+#!/bin/bash
+command="aws ec2 request-spot-fleet --spot-fleet-request-config file:///home/hantoine/.aws-request.json --query \"SpotFleetRequestId\""
+fleet_request_id=$($command | sed -e 's/^"//' -e 's/"$//')
+if [ "$?" -ne "0" ] ; then
+ 	exit
+fi
+
+# Not using aws ec2 wait spot-instance-request-fulfilled because:
+#  1) It does not work with fleet request (it's impossible to get instance-request from fleet-request)
+#  2) It polls only every 15 seconds
+sleep 10 # No point checking too early, it takes at least 10 seconds
+check_instance="aws ec2 describe-spot-fleet-instances --spot-fleet-request-id $fleet_request_id"
+n_instance_ready=$($check_instance | jq '.ActiveInstances | length')
+while [ "$n_instance_ready" -eq "0" ] ; do
+	sleep 3
+	n_instance_ready=$($check_instance | jq '.ActiveInstances | length')
+done
+
+get_instance_id="aws ec2 describe-spot-fleet-instances --spot-fleet-request-id $fleet_request_id --query ActiveInstances[0].InstanceId"
+instance_id=$($get_instance_id | sed -e 's/^"//' -e 's/"$//')
+
+get_ip_address="aws ec2 describe-instances --instance-ids $instance_id --query Reservations[0].Instances[0].PublicIpAddress"
+ip_address=$($get_ip_address | sed -e 's/^"//' -e 's/"$//')
+echo "IP Address: $ip_address"
+
+check_instance_running="aws ec2 describe-instances --instance-ids $instance_id --query Reservations[0].Instances[0].State.Name"
+instance_state=$($check_instance_running | sed -e 's/^"//' -e 's/"$//')
+while [ "$instance_state" != "running" ] ; do
+	sleep 5
+	instance_state=$($check_instance_running | sed -e 's/^"//' -e 's/"$//')
+done
+sleep 10
+echo "Connecting..."
+aws-ssh $ip_address
