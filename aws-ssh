@@ -4,8 +4,4 @@ if [ -z "$1" ] ; then
 else
 	ip=$1
 fi
-if [ -z "$(ssh-keygen -F $ip)" ]; then
-	# Still vulnerable to MITM since host key is not verified
-	ssh-keyscan -H $ip >> ~/.ssh/known_hosts
-fi
 ssh -i ~/.ssh/aws-laptop.pem ec2-user@$ip
