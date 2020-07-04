@@ -1,0 +1,138 @@
+{
+  "IamFleetRole": "arn:aws:iam::309827471588:role/aws-ec2-spot-fleet-tagging-role",
+  "AllocationStrategy": "lowestPrice",
+  "TargetCapacity": 1,
+  "TerminateInstancesWithExpiration": true,
+  "LaunchSpecifications": [],
+  "Type": "request",
+  "LaunchTemplateConfigs": [
+    {
+      "LaunchTemplateSpecification": {
+        "LaunchTemplateId": "<%= DEFAULT_LAUNCH_TEMPLATE_ID %>",
+        "Version": "$Latest"
+      },
+      "Overrides": [
+        {
+          "InstanceType": "c4.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-0eb17165"
+        },
+        {
+          "InstanceType": "c4.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-5ce28410"
+        },
+        {
+          "InstanceType": "c4.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-92122ce8"
+        },
+        {
+          "InstanceType": "c5d.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-0eb17165"
+        },
+        {
+          "InstanceType": "c5d.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-5ce28410"
+        },
+        {
+          "InstanceType": "c5d.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-92122ce8"
+        },
+        {
+          "InstanceType": "c6g.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-0eb17165"
+        },
+        {
+          "InstanceType": "c6g.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-5ce28410"
+        },
+        {
+          "InstanceType": "c6g.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-92122ce8"
+        },
+        {
+          "InstanceType": "c5.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-0eb17165"
+        },
+        {
+          "InstanceType": "c5.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-5ce28410"
+        },
+        {
+          "InstanceType": "c5.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-92122ce8"
+        },
+        {
+          "InstanceType": "m5.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-0eb17165"
+        },
+        {
+          "InstanceType": "m5.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-5ce28410"
+        },
+        {
+          "InstanceType": "m5.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-92122ce8"
+        },
+        {
+          "InstanceType": "m6g.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-0eb17165"
+        },
+        {
+          "InstanceType": "m6g.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-5ce28410"
+        },
+        {
+          "InstanceType": "m6g.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-92122ce8"
+        },
+        {
+          "InstanceType": "r6g.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-0eb17165"
+        },
+        {
+          "InstanceType": "r6g.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-5ce28410"
+        },
+        {
+          "InstanceType": "r6g.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-92122ce8"
+        },
+        {
+          "InstanceType": "r5.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-0eb17165"
+        },
+        {
+          "InstanceType": "r5.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-5ce28410"
+        },
+        {
+          "InstanceType": "r5.4xlarge",
+          "WeightedCapacity": 1,
+          "SubnetId": "subnet-92122ce8"
+        }
+      ]
+    }
+  ]
+}

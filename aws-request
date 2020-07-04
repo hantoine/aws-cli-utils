@@ -1,5 +1,10 @@
 #!/bin/bash
-command="aws ec2 request-spot-fleet --spot-fleet-request-config file:///home/hantoine/.aws-request.json --query \"SpotFleetRequestId\""
+if [ -z $1 ] ; then
+	request_id='default'
+else
+	request_id=$1
+fi
+command="aws ec2 request-spot-fleet --spot-fleet-request-config file:///etc/aws-cli-utils/$request_id-aws-request.json --query \"SpotFleetRequestId\""
 fleet_request_id=$($command | sed -e 's/^"//' -e 's/"$//')
 if [ "$?" -ne "0" ] ; then
  	exit
