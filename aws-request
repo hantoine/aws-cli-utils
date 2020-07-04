@@ -35,19 +35,19 @@ while [ "$instance_state" != "running" ] ; do
 	instance_state=$($check_instance_running | sed -e 's/^"//' -e 's/"$//')
 done
 
-sleep 12
+sleep 10
 
 # Adding SSH host key in SSH known hosts file
-get_ssh_host_key_cmd="ssh-keyscan -t ecdsa -H $ip"
+get_ssh_host_key_cmd="ssh-keyscan -t ecdsa -H $ip_address"
 found_host_key_entry=$($get_ssh_host_key_cmd 2> /dev/null)
-found_host_key=$(echo $host_key_entry | cut -d "|" -f 4 | cut -d " " -f 2-)
+found_host_key=$(echo $found_host_key_entry | cut -d "|" -f 4 | cut -d " " -f 2-)
 check_ssh_host_key_cmd="aws ec2 get-console-output --instance-id $instance_id --output text | grep ecdsa"
 correct_host_key=$(sh -c "$check_ssh_host_key_cmd" | head -c -3)
 if [ "$correct_host_key" != "$found_host_key" ] ; then
 	echo "SSH host key does not match"
 	exit
 else
-	echo $host_key_entry >> ~/.ssh/known_hosts
+	echo $found_host_key_entry >> ~/.ssh/known_hosts
 fi
 echo "Connecting..."
 aws-ssh $ip_address
