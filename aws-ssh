@@ -1,6 +1,10 @@
 #!/bin/sh
 if [ -z "$1" ] ; then
 	ip=$(aws ec2 describe-instances --query "Reservations[0].Instances[0].NetworkInterfaces[0].Association.PublicIp" --filters "Name=instance-state-name,Values=running" | sed -e 's/^"//' -e 's/"$//')
+	if [ "$ip" = "null" ] ; then
+		echo "No Instance running"
+		exit 1
+	fi
 else
 	ip=$1
 fi
