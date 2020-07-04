@@ -69,12 +69,22 @@ while [ -z "$found_host_key" ] ; do
 done
 
 echo "waiting to check SSH host key..."
+n_attempts=0
 check_ssh_host_key_cmd="aws ec2 get-console-output --instance-id $instance_id --output text | grep ecdsa"
 while [ -z "$correct_host_key" ] ; do
+	((n_attempts++))
 	correct_host_key=$(sh -c "$check_ssh_host_key_cmd" | head -c -3)
 	sleep 3
+	if [ $n_attempts -eq 3 ] ; then
+		echo "Keep waiting for validation of SSH host_key?"
+		read rep
+		if [ "$rep" = "n" ] ; then
+			skipcheck="true"
+			break
+		fi
+	fi
 done
-if [ "$correct_host_key" != "$found_host_key" ] ; then
+if [ "$correct_host_key" != "$found_host_key" ] && [ "$skipcheck" != "true" ] ; then
 	echo "SSH host key does not match"
 	exit
 else
