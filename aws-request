@@ -4,7 +4,26 @@ if [ -z $1 ] ; then
 else
 	request_id=$1
 fi
-command="aws ec2 request-spot-fleet --spot-fleet-request-config file:///etc/aws-cli-utils/$request_id-aws-request.json --query \"SpotFleetRequestId\""
+splot_fleet_request_config="/etc/aws-cli-utils/$request_id-aws-request.json"
+if [ ! -f "$splot_fleet_request_config" ] ; then
+	if [ -f "$splot_fleet_request_config.ejs" ] ; then
+		if [ -z "$AWS_CLI_UTILS_DEFAULT_KEY_NAME" ] ; then
+			echo "Which AWS key pair should be used ?"
+			read key_name
+			echo "The key pair file should be placed in ~/.ssh and named $key_name.pem"
+			echo "Set the environment variable AWS_CLI_UTILS_DEFAULT_KEY_NAME to set the key pair to use for next times"
+		else
+			key_name="$AWS_CLI_UTILS_DEFAULT_KEY_NAME"
+		fi
+		mkdir -p /tmp/aws-cli-utils
+		cat $splot_fleet_request_config.ejs | sed "s/<%= KEY_NAME %>/$key_name/g" > /tmp/aws-cli-utils/$request_id-aws-request.json
+		splot_fleet_request_config="/tmp/aws-cli-utils/$request_id-aws-request.json"
+	else
+		echo "No config for $request_id"
+		exit 1
+	fi
+fi
+command="aws ec2 request-spot-fleet --spot-fleet-request-config file://$splot_fleet_request_config --query \"SpotFleetRequestId\""
 fleet_request_id=$($command | sed -e 's/^"//' -e 's/"$//')
 if [ "$?" -ne "0" ] ; then
  	exit
@@ -50,4 +69,4 @@ else
 	echo $found_host_key_entry >> ~/.ssh/known_hosts
 fi
 echo "Connecting..."
-aws-ssh $ip_address
+AWS_CLI_UTILS_DEFAULT_KEY_NAME=$key_name aws-ssh $ip_address
