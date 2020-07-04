@@ -11,11 +11,11 @@ Bash scripts to quickly request and manage EC2 spot instances from the command l
 
 ## Installation:
   0. If you don't already have it, install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html "Installing the AWS CLI version 2 on Linux") and [configure it](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html "Configuration basics").
-  1. [Create a Launch template](https://console.aws.amazon.com/ec2/v2/home#CreateTemplate:) specifying the configuration used by default by the `aws-request` command.
-  2. Clone this repository and execute the following command from the root of the repository:
-     ```sudo -E ./install.sh```
-  3. When asked for the default Launch template, use the ID of the Launch template you just created. If the environment variable `AWS_CLI_UTILS_DEFAULT_LAUNCH_TEMPLATE_ID` is set, the script will read the Launch template ID from it.
-  
+  1. Clone this repository
+  2. Execute the following command from the root of the repository:
+     ```sudo ./install.sh```
+
+
 ## Configuration
   The configuration files are located in `/etc/aws-cli-utils/`:
   - `default-aws-request.json`: [Spot Fleet configurations](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-examples.html) used by `aws-request` by default.
