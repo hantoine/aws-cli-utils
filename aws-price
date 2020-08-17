@@ -5,7 +5,7 @@ if [ "$#" -lt 1 ]; then
 fi
 
 command="aws ec2 describe-spot-price-history \
-	 --start-time $(date -Idate) \
+	 --start-time $(date -Ihours) \
 	 --filters \
 		Name=product-description,Values=Linux/UNIX \
 		Name=instance-type,Values=$1"
