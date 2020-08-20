@@ -1,13 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 if [ -z "$1" ] ; then
-	ip=$(aws ec2 describe-instances --query "Reservations[0].Instances[0].NetworkInterfaces[0].Association.PublicIp" --filters "Name=instance-state-name,Values=running" | sed -e 's/^"//' -e 's/"$//')
-	if [ "$ip" = "null" ] ; then
-		echo "No Instance running"
-		exit 1
-	fi
+	res=$(aws ec2 describe-instances --query "Reservations[0].Instances[0].{IP:NetworkInterfaces[0].Association.PublicIp,AMI:ImageId}" --filters "Name=instance-state-name,Values=running")
+	ip=$(echo $res | jq .IP | sed -e 's/^"//' -e 's/"$//')
+	ami=$(echo $res | jq .AMI | sed -e 's/^"//' -e 's/"$//')
 else
 	ip=$1
+	if [ -z "$2" ] ; then
+		ami=$(aws ec2 describe-instances --query "Reservations[0].Instances[0].ImageId" \
+			--filters Name=ip-address,Values=$ip | sed -e 's/^"//' -e 's/"$//')
+	else
+		ami=$2
+	fi
 fi
+
 
 if [ -z "$AWS_CLI_UTILS_DEFAULT_KEY_NAME" ] ; then
 	echo "Which AWS key pair should be used ?"
@@ -18,10 +23,18 @@ else
 	key_name="$AWS_CLI_UTILS_DEFAULT_KEY_NAME"
 fi
 
-# Not all AMI uses ec2-user
-for user in ec2-user ubuntu admin centos ; do
-	ssh -i ~/.ssh/$key_name.pem $user@$ip
-	if [ "$?" -eq 0 ] ; then
-		break
+function get_connection_user() {
+	ami=$1
+	source /etc/aws-cli-utils/ami-users
+	ami_user_var="$(echo $ami | sed 's/-/_/')_user"
+	user=${!ami_user_var}
+	if [ -z "$user" ] ; then
+		echo "Unknown connection user for ami: $ami"
+		read -p "Enter the connection user: " user
+		echo "You can add this to the config in /etc/aws-cli-utils/ami-users"
 	fi
-done
+	echo $user
+}
+
+user=$(get_connection_user $ami)
+ssh -i ~/.ssh/$key_name.pem $user@$ip

@@ -71,4 +71,4 @@ else
 	echo $found_host_key_entry >> ~/.ssh/known_hosts
 fi
 echo "Connecting..."
-aws-ssh $ip_address
+aws-ssh $ip_address $2

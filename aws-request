@@ -28,5 +28,10 @@ fleet_request_id=$($command | sed -e 's/^"//' -e 's/"$//')
 if [ "$?" -ne "0" ] ; then
  	exit
 fi
+
+# Knowing the AMI is useful later for aws-ssh to directly know the user to connect with
+ami=$(cat $splot_fleet_request_config  | grep ImageId | head -n 1 | cut -d '"' -f 4)
+
+echo "Waiting for Spot request to be processed..."
 sleep 10 # It takes at least 10s, no point checking earlier
-AWS_CLI_UTILS_DEFAULT_KEY_NAME=$key_name aws-wait-request $fleet_request_id
+AWS_CLI_UTILS_DEFAULT_KEY_NAME=$key_name aws-wait-request $fleet_request_id $ami
