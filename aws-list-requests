@@ -1,2 +1,2 @@
 #!/bin/sh -x
-aws ec2 describe-spot-fleet-requests --query SpotFleetRequestConfigs[].{ID:SpotFleetRequestId,Status:ActivityStatus}
+aws ec2 describe-spot-fleet-requests --query SpotFleetRequestConfigs[].{ID:SpotFleetRequestId,Status:ActivityStatus} | jq '.[] | select(.Status != null)'

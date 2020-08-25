@@ -30,7 +30,7 @@ if [ "$?" -ne "0" ] ; then
 fi
 
 # Knowing the AMI is useful later for aws-ssh to directly know the user to connect with
-ami=$(cat $splot_fleet_request_config  | grep ImageId | head -n 1 | cut -d '"' -f 4)
+ami=$(cat "$splot_fleet_request_config"  | grep ImageId | head -n 1 | cut -d '"' -f 4)
 
 echo "Waiting for Spot request to be processed..."
 sleep 10 # It takes at least 10s, no point checking earlier
