@@ -29,9 +29,9 @@ function get_connection_user() {
 	ami_user_var="$(echo $ami | sed 's/-/_/')_user"
 	user=${!ami_user_var}
 	if [ -z "$user" ] ; then
-		echo "Unknown connection user for ami: $ami"
-		read -p "Enter the connection user: " user
-		echo "You can add this to the config in /etc/aws-cli-utils/ami-users"
+		echo "Unknown connection user for ami: $ami" >&2
+		read -p "Enter the connection user: " user >&2
+		echo "You can add this to the config in /etc/aws-cli-utils/ami-users" >&2
 	fi
 	echo $user
 }
