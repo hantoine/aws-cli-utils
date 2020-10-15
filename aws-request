@@ -15,7 +15,7 @@ if [ ! -f "$splot_fleet_request_config" ] ; then
 		else
 			key_name="$AWS_CLI_UTILS_DEFAULT_KEY_NAME"
 		fi
-                subnets=$(aws ec2 describe-subnets --query "Subnets[].SubnetId" --output text | sed "s/\t/, /g")
+                subnets=$(aws ec2 describe-subnets --query "Subnets[].SubnetId" --filters "Name=defaultForAz,Values=true" --output text | sed "s/\t/, /g")
 		mkdir -p /tmp/aws-cli-utils
 		cat $splot_fleet_request_config.ejs \
                     | sed "s/<%= KEY_NAME %>/$key_name/g" \
