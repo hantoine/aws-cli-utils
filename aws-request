@@ -15,8 +15,12 @@ if [ ! -f "$splot_fleet_request_config" ] ; then
 		else
 			key_name="$AWS_CLI_UTILS_DEFAULT_KEY_NAME"
 		fi
+                subnets=$(aws ec2 describe-subnets --query "Subnets[].SubnetId" --output text | sed "s/\t/, /g")
 		mkdir -p /tmp/aws-cli-utils
-		cat $splot_fleet_request_config.ejs | sed "s/<%= KEY_NAME %>/$key_name/g" > /tmp/aws-cli-utils/$request_id-aws-request.json
+		cat $splot_fleet_request_config.ejs \
+                    | sed "s/<%= KEY_NAME %>/$key_name/g" \
+                    | sed "s/<%= SUBNETS %>/$subnets/g" \
+                    > /tmp/aws-cli-utils/$request_id-aws-request.json
 		splot_fleet_request_config="/tmp/aws-cli-utils/$request_id-aws-request.json"
 	else
 		echo "No config for $request_id"
@@ -26,7 +30,7 @@ fi
 command="aws ec2 request-spot-fleet --spot-fleet-request-config file://$splot_fleet_request_config --query \"SpotFleetRequestId\""
 fleet_request_id=$($command | sed -e 's/^"//' -e 's/"$//')
 if [ "$?" -ne "0" ] ; then
- 	exit
+	exit
 fi
 
 # Knowing the AMI is useful later for aws-ssh to directly know the user to connect with

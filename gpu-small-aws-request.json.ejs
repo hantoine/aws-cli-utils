@@ -1,0 +1,143 @@
+{
+    "IamFleetRole": "arn:aws:iam::309827471588:role/aws-ec2-spot-fleet-tagging-role",
+    "AllocationStrategy": "lowestPrice",
+    "TargetCapacity": 1,
+    "SpotPrice": "0.584",
+    "TerminateInstancesWithExpiration": true,
+    "LaunchSpecifications": [
+        {
+            "ImageId": "ami-0706bc0faa4f311b1",
+            "InstanceType": "g4dn.xlarge",
+            "SubnetId": "<%= SUBNETS %>",
+            "KeyName": "<%= KEY_NAME %>",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0883d60b9d9d2ca68",
+                        "VolumeSize": 50,
+                        "Encrypted": false,
+                        "VolumeType": "gp2"
+                    }
+                }
+            ],
+            "SpotPrice": "0.584"
+        },
+        {
+            "ImageId": "ami-0706bc0faa4f311b1",
+            "InstanceType": "g4dn.2xlarge",
+            "SubnetId": "<%= SUBNETS %>",
+            "KeyName": "<%= KEY_NAME %>",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0883d60b9d9d2ca68",
+                        "VolumeSize": 50,
+                        "Encrypted": false,
+                        "VolumeType": "gp2"
+                    }
+                }
+            ],
+            "SpotPrice": "0.4175"
+        },
+        {
+            "ImageId": "ami-0706bc0faa4f311b1",
+            "InstanceType": "g4dn.4xlarge",
+            "SubnetId": "<%= SUBNETS %>",
+            "KeyName": "<%= KEY_NAME %>",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0883d60b9d9d2ca68",
+                        "VolumeSize": 50,
+                        "Encrypted": false,
+                        "VolumeType": "gp2"
+                    }
+                }
+            ],
+            "SpotPrice": "0.3342"
+        },
+        {
+            "ImageId": "ami-0706bc0faa4f311b1",
+            "InstanceType": "g4dn.8xlarge",
+            "SubnetId": "<%= SUBNETS %>",
+            "KeyName": "<%= KEY_NAME %>",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0883d60b9d9d2ca68",
+                        "VolumeSize": 50,
+                        "Encrypted": false,
+                        "VolumeType": "gp2"
+                    }
+                }
+            ],
+            "SpotPrice": "0.302"
+        },
+        {
+            "ImageId": "ami-0706bc0faa4f311b1",
+            "InstanceType": "g4dn.12xlarge",
+            "SubnetId": "<%= SUBNETS %>",
+            "KeyName": "<%= KEY_NAME %>",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0883d60b9d9d2ca68",
+                        "VolumeSize": 50,
+                        "Encrypted": false,
+                        "VolumeType": "gp2"
+                    }
+                }
+            ],
+            "SpotPrice": "0.3619"
+        },
+        {
+            "ImageId": "ami-0706bc0faa4f311b1",
+            "InstanceType": "g4dn.16xlarge",
+            "SubnetId": "<%= SUBNETS %>",
+            "KeyName": "<%= KEY_NAME %>",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0883d60b9d9d2ca68",
+                        "VolumeSize": 50,
+                        "Encrypted": false,
+                        "VolumeType": "gp2"
+                    }
+                }
+            ],
+            "SpotPrice": "0.302"
+        },
+        {
+            "ImageId": "ami-0706bc0faa4f311b1",
+            "InstanceType": "g4dn.metal",
+            "SubnetId": "<%= SUBNETS %>",
+            "KeyName": "<%= KEY_NAME %>",
+            "BlockDeviceMappings": [
+                {
+                    "DeviceName": "/dev/sda1",
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0883d60b9d9d2ca68",
+                        "VolumeSize": 50,
+                        "Encrypted": false,
+                        "VolumeType": "gp2"
+                    }
+                }
+            ],
+            "SpotPrice": "0.362"
+        }
+    ],
+    "Type": "request"
+}
