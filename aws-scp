@@ -1,0 +1,53 @@
+#!/bin/bash
+src_path=$1
+dst_path=$2
+if [[ "$src_path" == *":"* ]]; then
+    ip=$(echo $src_path | cut -d ':' -f 1)
+elif [[ "$dst_path" == *":"* ]]; then
+    ip=$(echo $dst_path | cut -d ':' -f 1)
+else
+    exit 1
+fi
+if [ -z "$ip" ] ; then
+    res=$(aws ec2 describe-instances --query "Reservations[0].Instances[0].{IP:NetworkInterfaces[0].Association.PublicIp,AMI:ImageId}" --filters "Name=instance-state-name,Values=running")
+    ip=$(echo $res | jq .IP | sed -e 's/^"//' -e 's/"$//')
+    ami=$(echo $res | jq .AMI | sed -e 's/^"//' -e 's/"$//')
+    if [[ "$src_path" == *":"* ]]; then
+        src_path="$ip$src_path"
+    elif [[ "$dst_path" == *":"* ]]; then
+        dst_path="$ip$dst_path"
+    fi
+else
+    ami=$(aws ec2 describe-instances --query "Reservations[0].Instances[0].ImageId" \
+          --filters Name=ip-address,Values=$ip | sed -e 's/^"//' -e 's/"$//')
+fi
+
+if [ -z "$AWS_CLI_UTILS_DEFAULT_KEY_NAME" ] ; then
+    echo "Which AWS key pair should be used ?"
+    read key_name
+    echo "The key pair file should be placed in ~/.ssh and named $key_name.pem"
+    echo "Set the environment variable AWS_CLI_UTILS_DEFAULT_KEY_NAME to set the key pair to use for next times"
+else
+    key_name="$AWS_CLI_UTILS_DEFAULT_KEY_NAME"
+fi
+
+function get_connection_user() {
+    ami=$1
+    source /etc/aws-cli-utils/ami-users
+    ami_user_var="$(echo $ami | sed 's/-/_/')_user"
+    user=${!ami_user_var}
+    if [ -z "$user" ] ; then
+	echo "Unknown connection user for ami: $ami" >&2
+	read -p "Enter the connection user: " user >&2
+	echo "You can add this to the config in /etc/aws-cli-utils/ami-users" >&2
+    fi
+    echo $user
+}
+
+user=$(get_connection_user $ami)
+if [[ "$src_path" == *":"* ]]; then
+    src_path="$user@$src_path"
+elif [[ "$dst_path" == *":"* ]]; then
+    dst_path="$user@$dst_path"
+fi
+scp -r -i ~/.ssh/$key_name.pem $src_path $dst_path
