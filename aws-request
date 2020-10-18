@@ -1,4 +1,27 @@
 #!/bin/bash
+
+function create_fleet_tagging_role() {
+    cat << 'EOF' > /tmp/aws-cli-utils/fleet-tagging-role-trust-policy
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "spotfleet.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+    aws iam create-role --role-name aws-ec2-spot-fleet-tagging-role --assume-role-policy-document file:///tmp/aws-cli-utils/fleet-tagging-role-trust-policy >> /dev/null
+    sleep 4
+    aws iam attach-role-policy --role-name aws-ec2-spot-fleet-tagging-role --policy-arn arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole
+    sleep 4
+}
+
 if [ -z $1 ] ; then
 	request_id='default'
 else
@@ -15,11 +38,17 @@ if [ ! -f "$splot_fleet_request_config" ] ; then
 		else
 			key_name="$AWS_CLI_UTILS_DEFAULT_KEY_NAME"
 		fi
-                subnets=$(aws ec2 describe-subnets --query "Subnets[].SubnetId" --filters "Name=defaultForAz,Values=true" --output text | sed "s/\t/, /g")
 		mkdir -p /tmp/aws-cli-utils
+                subnets=$(aws ec2 describe-subnets --query "Subnets[].SubnetId" --filters "Name=defaultForAz,Values=true" --output text | sed "s/\t/, /g")
+                iam_fleet_role=$(aws iam get-role --role-name aws-ec2-spot-fleet-tagging-role --query Role.Arn --output text 2>> /dev/null)
+                if [ "$?" -ne "0" ] ; then  # the role does not exists
+                    create_fleet_tagging_role
+                    iam_fleet_role=$(aws iam get-role --role-name aws-ec2-spot-fleet-tagging-role --query Role.Arn --output text)
+                fi
 		cat $splot_fleet_request_config.ejs \
                     | sed "s/<%= KEY_NAME %>/$key_name/g" \
                     | sed "s/<%= SUBNETS %>/$subnets/g" \
+                    | sed "s#<%= IAM_FLEET_ROLE %>#$iam_fleet_role#g" \
                     > /tmp/aws-cli-utils/$request_id-aws-request.json
 		splot_fleet_request_config="/tmp/aws-cli-utils/$request_id-aws-request.json"
 	else
