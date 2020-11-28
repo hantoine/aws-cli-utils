@@ -45,6 +45,8 @@ if [ ! -f "$splot_fleet_request_config" ] ; then
                     create_fleet_tagging_role
                     iam_fleet_role=$(aws iam get-role --role-name aws-ec2-spot-fleet-tagging-role --query Role.Arn --output text)
                 fi
+                # Not sure if the service role is needed, the following command creates it
+                # aws iam create-service-linked-role --aws-service-name spotfleet.amazonaws.com
 		cat $splot_fleet_request_config.ejs \
                     | sed "s/<%= KEY_NAME %>/$key_name/g" \
                     | sed "s/<%= SUBNETS %>/$subnets/g" \
