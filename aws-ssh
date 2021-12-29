@@ -1,12 +1,12 @@
 #!/bin/bash
 if [ -z "$1" ] ; then
-	res=$(aws ec2 describe-instances --query "Reservations[0].Instances[0].{IP:NetworkInterfaces[0].Association.PublicIp,AMI:ImageId}" --filters "Name=instance-state-name,Values=running")
+	res=$(aws ec2 describe-instances --output json --query "Reservations[0].Instances[0].{IP:NetworkInterfaces[0].Association.PublicIp,AMI:ImageId}" --filters "Name=instance-state-name,Values=running")
 	ip=$(echo $res | jq .IP | sed -e 's/^"//' -e 's/"$//')
 	ami=$(echo $res | jq .AMI | sed -e 's/^"//' -e 's/"$//')
 else
 	ip=$1
 	if [ -z "$2" ] ; then
-		ami=$(aws ec2 describe-instances --query "Reservations[0].Instances[0].ImageId" \
+		ami=$(aws ec2 describe-instances --output json --query "Reservations[0].Instances[0].ImageId" \
 			--filters Name=ip-address,Values=$ip | sed -e 's/^"//' -e 's/"$//')
 	else
 		ami=$2

@@ -18,7 +18,7 @@ function create_fleet_tagging_role() {
 EOF
     aws iam create-role --role-name aws-ec2-spot-fleet-tagging-role --assume-role-policy-document file:///tmp/aws-cli-utils/fleet-tagging-role-trust-policy >> /dev/null
     sleep 4
-    aws iam attach-role-policy --role-name aws-ec2-spot-fleet-tagging-role --policy-arn arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole
+    aws iam attach-role-policy --output json --role-name aws-ec2-spot-fleet-tagging-role --policy-arn arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole
     sleep 4
 }
 
@@ -58,7 +58,7 @@ if [ ! -f "$splot_fleet_request_config" ] ; then
 		exit 1
 	fi
 fi
-command="aws ec2 request-spot-fleet --spot-fleet-request-config file://$splot_fleet_request_config --query \"SpotFleetRequestId\""
+command="aws ec2 request-spot-fleet --output json --spot-fleet-request-config file://$splot_fleet_request_config --query \"SpotFleetRequestId\""
 fleet_request_id=$($command | sed -e 's/^"//' -e 's/"$//')
 if [ "$?" -ne "0" ] ; then
 	exit

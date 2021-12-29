@@ -6,6 +6,7 @@ fi
 
 command="aws ec2 describe-spot-price-history \
 	 --start-time $(date -Ihours --utc) \
+         --output json \
 	 --filters \
 		Name=product-description,Values=Linux/UNIX \
 		Name=instance-type,Values=$1"
