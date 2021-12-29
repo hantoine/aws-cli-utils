@@ -47,4 +47,4 @@ else
 fi
 
 user=$(get_connection_user $ami)
-ssh -i ~/.ssh/$key_name.pem $user@$ip $tunnel_cmd_part
+LC_CTYPE=en_US.utf8 ssh -i ~/.ssh/$key_name.pem $user@$ip $tunnel_cmd_part
