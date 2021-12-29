@@ -40,5 +40,11 @@ function get_connection_user() {
 	echo $user
 }
 
+if [ ! -z "$AWS_CLI_UTILS_CREATE_SSH_TUNNEL" ] ; then
+    tunnel_cmd_part='-L 8889:localhost:8888'
+else
+    tunnel_cmd_part=''
+fi
+
 user=$(get_connection_user $ami)
-ssh -i ~/.ssh/$key_name.pem $user@$ip
+ssh -i ~/.ssh/$key_name.pem $user@$ip $tunnel_cmd_part
