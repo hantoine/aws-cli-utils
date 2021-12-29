@@ -54,7 +54,7 @@ while [ -z "$correct_host_key" ] ; do
 	if [ $n_attempts -eq 3 ] ; then
 		echo "Keep waiting for validation of SSH host_key?"
 		read -t 5 rep
-		if [ "$?" -eq "142" ] ; then # If read timed out
+		if [ "$?" -eq "142" ] || [ "$?" -eq "1" ] ; then # If read timed out
 			echo "Skipping SSH host_key validation"
 			rep="n"
 		fi
