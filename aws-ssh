@@ -1,6 +1,10 @@
 #!/bin/bash
 if [ -z "$1" ] ; then
 	res=$(aws ec2 describe-instances --output json --query "Reservations[0].Instances[0].{IP:NetworkInterfaces[0].Association.PublicIp,AMI:ImageId}" --filters "Name=instance-state-name,Values=running")
+        if [ "$res" = "null" ] ; then
+            echo "No running instance found"
+            exit 1
+        fi
 	ip=$(echo $res | jq .IP | sed -e 's/^"//' -e 's/"$//')
 	ami=$(echo $res | jq .AMI | sed -e 's/^"//' -e 's/"$//')
 else
