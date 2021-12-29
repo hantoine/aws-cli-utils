@@ -4,8 +4,14 @@ if [ "$#" -lt 1 ]; then
 	exit
 fi
 
+which gdate >> /dev/null
+if [ "$?" -eq 0 ] ; then
+    date_cmd='gdate'
+else
+    date_cmd='date'
+fi
 command="aws ec2 describe-spot-price-history \
-	 --start-time $(date -Ihours --utc) \
+	 --start-time $($date_cmd -Ihours --utc) \
          --output json \
 	 --filters \
 		Name=product-description,Values=Linux/UNIX \
