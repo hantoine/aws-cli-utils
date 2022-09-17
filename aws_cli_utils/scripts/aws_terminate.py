@@ -90,14 +90,14 @@ def main():
             print(
                 "Should the Spot Fleet Request be cancelled too? Other instances from the fleet will not be terminated, but the fleet will no longer be able to launch new instances."
             )
-            if input("(y/n): ") == "y":
+            if input("(Y/n): ") in ("y", "Y", ""):
                 cancel_spot_fleet_request(client, fleet_request_id)
         else:
             if (
                 input(
-                    "This instance is linked to a persistent Spot instance request, should the request be cancelled too (y/n): "
+                    "This instance is linked to a persistent Spot instance request, should the request be cancelled too (Y/n): "
                 )
-                == "y"
+                in ("Y", "y", "")
             ):
                 cancel_spot_request(client, request_id)
     terminate_instance(client, args.instance_id)
