@@ -29,13 +29,17 @@ fi
 
 function get_connection_user() {
 	ami=$1
-	source /etc/aws-cli-utils/ami-users
-	ami_user_var="$(echo $ami | sed 's/-/_/')_user"
-	user=${!ami_user_var}
+	user=$(cat ~/.aws-cli-utils/ami-users 2> /dev/null | jq -re ".[\"$ami\"] // empty")
 	if [ -z "$user" ] ; then
 		echo "Unknown connection user for ami: $ami" >&2
 		read -p "Enter the connection user: " user >&2
-		echo "You can add this to the config in /etc/aws-cli-utils/ami-users" >&2
+		echo "Adding it to  ~/.aws-cli-utils/ami-users" >&2
+		if [ ! -f "~/.aws-cli-utils/ami-users" ] ; then
+			mkdir -p ~/.aws-cli-utils
+			echo '{}' >> ~/.aws-cli-utils/ami-users
+		fi
+                tmpfile=$(mktemp)
+		jq ". + {\"$ami\": \"$user\"}" ~/.aws-cli-utils/ami-users > $tmpfile && mv $tmpfile ~/.aws-cli-utils/ami-users
 	fi
 	echo $user
 }

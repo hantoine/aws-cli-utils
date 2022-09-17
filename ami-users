@@ -1,8 +1,0 @@
-ami_b84c7bdd_user='ubuntu'
-ami_07efac79022b86107_user='ubuntu'
-ami_026dea5602e368e96_user='ec2-user'
-ami_008af57b604f522f9_user='ubuntu'
-ami_047289c2ebcce0fcf_user='ec2-user'
-ami_0f9193d448b01957d_user='ubuntu'
-ami_0706bc0faa4f311b1_user='ubuntu'
-ami_0482c3d18164023c5_user='hadoop'
