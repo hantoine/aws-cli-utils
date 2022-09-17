@@ -15,7 +15,7 @@ def parse_args():
     return parser.parse_args()
 
 
-if __name__ == "__main__":
+def main():
     args = parse_args()
     client = boto3.client("ec2")
     stop_instance(client, args.instance_id)

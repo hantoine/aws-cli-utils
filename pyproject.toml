@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "aws-cli-utils"
+version = "0.1.0"
+description = "Scripts for faster AWS EC2 CLI usage"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "aws_cli_utils"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+boto3 = "^1.24.75"
+
+
+[tool.poetry.scripts]
+aws-request = 'aws_cli_utils.scripts.aws_request:main'
+aws-get-ubuntu-ami = 'aws_cli_utils.scripts.aws_get_ubuntu_ami:main'
+aws-start = 'aws_cli_utils.scripts.aws_start:main'
+aws-stop = 'aws_cli_utils.scripts.aws_stop:main'
+aws-terminate= 'aws_cli_utils.scripts.aws_terminate:main'
+aws-list = 'aws_cli_utils.scripts.bash_scripts_wrapper:aws_list'
+aws-cancel-requests = 'aws_cli_utils.scripts.bash_scripts_wrapper:aws_cancel_requests'
+aws-list-requests = 'aws_cli_utils.scripts.bash_scripts_wrapper:aws_list_requests'
+aws-scp = 'aws_cli_utils.scripts.bash_scripts_wrapper:aws_scp'
+aws-ssh = 'aws_cli_utils.scripts.bash_scripts_wrapper:aws_ssh'
+aws-wait-request = 'aws_cli_utils.scripts.bash_scripts_wrapper:aws_wait_request'
+aws-wait-up = 'aws_cli_utils.scripts.bash_scripts_wrapper:aws_wait_up'
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -71,7 +71,7 @@ def cancel_spot_fleet_request(client, spot_fleet_request_id):
     )
 
 
-if __name__ == "__main__":
+def main():
     args = parse_args()
     client = boto3.client("ec2")
     is_persistent_request, request_id = check_persistent_request(

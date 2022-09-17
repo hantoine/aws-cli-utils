@@ -93,7 +93,7 @@ def wait_instance_reachable(ip_address):
     subprocess.run(f"aws-wait-up {ip_address}", shell=True, check=True)
 
 
-if __name__ == "__main__":
+def main():
     args = parse_args()
     client = boto3.client("ec2")
     request_id = request_spot_instance(client, args)

@@ -50,7 +50,7 @@ def add_ssh_host_key_to_known_keys(instance_ip):
         known_host_file.write(host_key)
 
 
-if __name__ == "__main__":
+def main():
     args = parse_args()
     client = boto3.client("ec2")
     start_instance(client, args.instance_id)
