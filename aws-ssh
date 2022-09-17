@@ -46,5 +46,11 @@ else
     tunnel_cmd_part=''
 fi
 
+if [ ! -x "$AWS_CLI_UTILS_ACCEPT_NEW_HOST_KEY" ] ; then
+    strick_host_checking_cmd_part='-o StrictHostKeyChecking=accept-new'
+else
+    strick_host_checking_cmd_part=''
+fi
+
 user=$(get_connection_user $ami)
-LC_CTYPE=en_US.utf8 ssh -i ~/.ssh/$key_name.pem $user@$ip $tunnel_cmd_part
+LC_CTYPE=en_US.utf8 ssh -i ~/.ssh/$key_name.pem $user@$ip $strick_host_checking_cmd_part $tunnel_cmd_part

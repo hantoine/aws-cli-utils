@@ -1,0 +1,21 @@
+#!/bin/bash
+ip_address=$1
+
+if [ -z "$ip_address" ] ; then
+    echo "Usage: $0 [ip_address]"
+    exit 1
+fi
+
+{
+  for i in {1..30}; do
+    if ! echo -n > /dev/tcp/${ip_address}/22; then
+        echo "Waiting for the instance to be reachable... ($i/30)"
+        sleep 1
+    else
+        echo "Instance is reachable"
+        exit 0
+    fi
+  done
+  echo "Instance still not reachable after 30s, timing out."
+  exit 2
+} 2>/dev/null

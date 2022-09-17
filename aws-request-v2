@@ -89,19 +89,26 @@ def add_ssh_host_key_to_known_keys(instance_ip):
             time.sleep(3)
 
 
+def wait_instance_reachable(ip_address):
+    subprocess.run(f"aws-wait-up {ip_address}", shell=True, check=True)
+
+
 if __name__ == "__main__":
     args = parse_args()
     client = boto3.client("ec2")
     request_id = request_spot_instance(client, args)
     instance_id = wait_instance_ready(client, request_id)
     instance_ip = get_instance_ip(client, instance_id)
-    print(f"Instance is running, connecting... ({instance_ip=})")
+    print(f"Instance starting... ({instance_ip=})")
+    wait_instance_reachable(instance_ip)
 
-    # Avoid SSH warning about unknown host key, no reliable way to check this key (see attempts in v1)
-    add_ssh_host_key_to_known_keys(instance_ip)
-
+    print("Connecting...")
     subprocess.run(
         f"aws-ssh {instance_ip} {args.ami}",
         shell=True,
-        env={**os.environ, "AWS_CLI_UTILS_DEFAULT_KEY_NAME": args.key},
+        env={
+            **os.environ,
+            "AWS_CLI_UTILS_DEFAULT_KEY_NAME": args.key,
+            "AWS_CLI_UTILS_ACCEPT_NEW_HOST_KEY": "",
+        },
     )
