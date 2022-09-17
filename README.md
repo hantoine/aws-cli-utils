@@ -11,5 +11,5 @@ Scripts to quickly request and manage EC2 spot instances from the command line.
 
 ## Installation:
   0. If you don't already have it, install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html "Installing the AWS CLI version 2 on Linux") and [configure it](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html "Configuration basics").
-  1. Download the Wheel file from the [latest Github Release](releases/latest).
+  1. Download the Wheel file from the [latest Github Release](https://github.com/hantoine/aws-cli-utils/releases/latest).
   2. Install it using pipx or pip: `pipx install ./aws_cli_utils-*.whl`.
